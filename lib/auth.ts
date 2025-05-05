@@ -1,4 +1,4 @@
-import { NextAuthOptions } from "next-auth"
+import { NextAuthOptions, Session, DefaultSession } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import GoogleProvider from "next-auth/providers/google"
 import FacebookProvider from "next-auth/providers/facebook"
@@ -144,7 +144,8 @@ export const authOptions: NextAuthOptions = {
       // Check if session should time out
       if (inactivityTime > thirtyMinutesInMs && !token.is_remembered_device) {
         // For non-remembered devices, end session after 30 minutes of inactivity
-        return null
+        // Return an empty session object instead of null
+        return {} as Session
       }
       
       // For remembered devices or active sessions, continue
