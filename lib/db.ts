@@ -1,5 +1,5 @@
 import { sql } from "@vercel/postgres"
-import { hash } from "bcrypt"
+import CryptoJS from 'crypto-js'
 
 export async function query(text: string, params?: any[]) {
   const start = Date.now()
@@ -60,7 +60,8 @@ export async function createUser(userData: any) {
     throw new Error("Password must be at least 8 characters long")
   }
   
-  const hashedPassword = await hash(password, 10)
+  // Use CryptoJS instead of bcrypt
+  const hashedPassword = CryptoJS.SHA256(password).toString(CryptoJS.enc.Hex)
   
   // Year validation
   const currentYear = new Date().getFullYear()
