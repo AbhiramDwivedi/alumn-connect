@@ -1,5 +1,10 @@
 import crypto from 'crypto';
 
+// Define custom interface for global object
+declare global {
+  var pkce_code_verifier: string | undefined;
+}
+
 /**
  * Generates a code verifier for PKCE authentication
  * @returns A random string between 43-128 characters long

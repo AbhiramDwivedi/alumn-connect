@@ -1,5 +1,6 @@
 import { sql } from "@vercel/postgres"
 import CryptoJS from 'crypto-js'
+import { QueryResult, QueryResultRow } from "@vercel/postgres"
 
 export async function query(text: string, params?: any[]) {
   const start = Date.now()
@@ -174,7 +175,6 @@ export async function searchAlumni(searchParams: any) {
 
   // Using parameterized queries with Vercel's sql template literals for safety
   let conditions = []
-  let sqlParams: any[] = []
   
   if (query) {
     conditions.push(sql`(
@@ -201,21 +201,25 @@ export async function searchAlumni(searchParams: any) {
     conditions.push(sql`location ILIKE ${`%${location}%`}`)
   }
   
-  // Base query
-  let finalQuery = sql`SELECT * FROM users WHERE status = 'approved'`
+  // Base query - start with raw SQL
+  let query_text = "SELECT * FROM users WHERE status = 'approved'";
+  let params: any[] = [];
   
-  // Add conditions if any
+  // Build up the complete query
   if (conditions.length > 0) {
-    for (const condition of conditions) {
-      finalQuery = sql`${finalQuery} AND ${condition}`
-    }
+    // Convert the query into a prepared statement with parameters
+    // This is a simplified approach - in a real app, you'd need more robust SQL building
+    const result = await sql.query(
+      `${query_text} AND ${conditions.map(() => '(?)').join(' AND ')} ORDER BY name ASC`,
+      conditions
+    );
+    
+    return result.rows;
+  } else {
+    // Simple query without conditions
+    const result = await sql.query(`${query_text} ORDER BY name ASC`);
+    return result.rows;
   }
-  
-  // Add ordering
-  finalQuery = sql`${finalQuery} ORDER BY name ASC`
-  
-  const result = await finalQuery
-  return result.rows
 }
 
 /**
@@ -229,7 +233,8 @@ export async function storeUserDevice(deviceData: {
   last_used: Date;
   user_agent: string;
 }) {
-  const { user_id, device_id, last_used, user_agent } = deviceData;
+  const { user_id, device_id, user_agent } = deviceData;
+  const last_used_iso = deviceData.last_used.toISOString(); // Convert Date to string
   
   try {
     // Check if device already exists for this user
@@ -239,7 +244,7 @@ export async function storeUserDevice(deviceData: {
       // Update the existing device record
       const result = await sql`
         UPDATE user_devices 
-        SET last_used = ${last_used}, user_agent = ${user_agent}, updated_at = CURRENT_TIMESTAMP 
+        SET last_used = ${last_used_iso}, user_agent = ${user_agent}, updated_at = CURRENT_TIMESTAMP 
         WHERE user_id = ${user_id} AND device_id = ${device_id}
         RETURNING *
       `;
@@ -248,7 +253,7 @@ export async function storeUserDevice(deviceData: {
       // Create a new device record
       const result = await sql`
         INSERT INTO user_devices (user_id, device_id, last_used, user_agent)
-        VALUES (${user_id}, ${device_id}, ${last_used}, ${user_agent})
+        VALUES (${user_id}, ${device_id}, ${last_used_iso}, ${user_agent})
         RETURNING *
       `;
       return result.rows[0];
@@ -312,7 +317,7 @@ export async function removeUserDevice(userId: string, deviceId: string) {
       WHERE user_id = ${userId} AND device_id = ${deviceId}
     `;
     
-    return result.rowCount > 0;
+    return result.rowCount !== null && result.rowCount > 0;
   } catch (error) {
     console.error("Error removing user device:", error);
     return false;
