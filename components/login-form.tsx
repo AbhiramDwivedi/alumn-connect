@@ -93,6 +93,7 @@ export function LoginForm() {
         password: data.password,
         device_id: deviceId,
         remember_device: data.rememberDevice.toString(),
+        user_agent: navigator.userAgent, // Add user agent info
         redirect: false,
       })
       

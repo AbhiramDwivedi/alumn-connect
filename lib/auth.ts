@@ -32,7 +32,8 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
         code_verifier: { label: "Code Verifier", type: "text" },
         device_id: { label: "Device ID", type: "text" },
-        remember_device: { label: "Remember Device", type: "boolean" }
+        remember_device: { label: "Remember Device", type: "boolean" },
+        user_agent: { label: "User Agent", type: "text" } // Add user_agent to credentials definition
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
