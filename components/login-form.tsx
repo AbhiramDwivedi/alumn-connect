@@ -9,8 +9,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
-import { FaGoogle, FaFacebook, FaApple } from "react-icons/fa"
-import { Loader2 } from "lucide-react"
+// Replace the react-icons import with compatible icons
+import { Loader2, Mail, Apple, Facebook } from "lucide-react"
 import { generateCodeVerifier, getOrCreateDeviceId } from "@/lib/pkce"
 
 export function LoginForm() {
@@ -194,7 +194,7 @@ export function LoginForm() {
           onClick={() => handleOAuthSignIn("google")}
           className="hover:bg-mnit-light hover:text-mnit-primary hover:border-mnit-primary/50 transition-all"
         >
-          <FaGoogle className="mr-2 h-4 w-4" />
+          <Mail className="mr-2 h-4 w-4" />
           Google
         </Button>
         <Button
@@ -204,7 +204,7 @@ export function LoginForm() {
           onClick={() => handleOAuthSignIn("apple")}
           className="hover:bg-mnit-light hover:text-mnit-primary hover:border-mnit-primary/50 transition-all"
         >
-          <FaApple className="mr-2 h-4 w-4" />
+          <Apple className="mr-2 h-4 w-4" />
           Apple
         </Button>
         <Button
@@ -214,7 +214,7 @@ export function LoginForm() {
           onClick={() => handleOAuthSignIn("facebook")}
           className="hover:bg-mnit-light hover:text-mnit-primary hover:border-mnit-primary/50 transition-all"
         >
-          <FaFacebook className="mr-2 h-4 w-4" />
+          <Facebook className="mr-2 h-4 w-4" />
           Facebook
         </Button>
       </div>
