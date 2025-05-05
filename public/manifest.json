@@ -1,0 +1,21 @@
+{
+  "name": "MNIT AlumConnect",
+  "short_name": "AlumConnect",
+  "description": "Connect with MNIT alumni worldwide",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#003A70",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/images/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
