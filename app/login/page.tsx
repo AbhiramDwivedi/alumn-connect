@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { Suspense } from "react"
 import { LoginForm } from "@/components/login-form"
 import { branding } from "@/lib/branding"
 import Link from "next/link"
@@ -38,7 +39,9 @@ export default function LoginPage() {
             Sign in to your alumni account
           </p>
         </div>
-        <LoginForm />
+        <Suspense fallback={<div>Loading login form...</div>}>
+          <LoginForm />
+        </Suspense>
         <p className="px-8 text-center text-sm text-muted-foreground">
           New to {branding.name}?{" "}
           <Link
