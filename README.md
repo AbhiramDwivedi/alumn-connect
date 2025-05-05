@@ -10,13 +10,14 @@ A comprehensive alumni directory and networking platform hosted on Vercel, conne
 - **User Authentication**: Secure login with email verification and optional OAuth providers
 - **Dashboard**: Personalized dashboard with relevant statistics and activity feed
 - **Responsive Design**: Optimized for desktop and mobile devices
+- **Advanced Session Management**: PKCE authentication, device registration, and intelligent session timeouts
 
 ## Tech Stack
 
 - **Frontend**: Next.js, React, Tailwind CSS, shadcn/ui components
 - **Backend**: Next.js API routes
 - **Database**: PostgreSQL 
-- **Authentication**: NextAuth.js
+- **Authentication**: NextAuth.js with PKCE support
 - **Deployment**: Vercel
 
 ## Getting Started
@@ -59,6 +60,9 @@ alumn-connect/
 │   ├── ui/             # UI components based on shadcn/ui
 ├── hooks/              # Custom React hooks
 ├── lib/                # Utility functions and shared logic
+│   ├── auth.ts         # NextAuth.js configuration
+│   ├── db.ts           # Database access functions
+│   ├── pkce.ts         # PKCE authentication utilities
 ├── public/             # Static assets
 ├── styles/             # Global styles
 ```
@@ -71,8 +75,37 @@ The project uses PostgreSQL for data storage. The database schema includes table
 - Events
 - Job opportunities
 - Activity feed
+- User devices (for session management)
 
 You can find the database schema in `db-schema.js`.
+
+## Authentication and Session Management
+
+AlumnConnect features advanced session management capabilities:
+
+### PKCE Authentication
+
+- Implements Proof Key for Code Exchange (PKCE) for enhanced authentication security
+- Supports PKCE with both credential-based logins and OAuth providers
+- Mitigates authorization code interception attacks
+
+### Device Registration
+
+- Users can choose to register trusted devices
+- "Remember this device" option during login saves device information
+- View and manage trusted devices in account settings
+
+### Intelligent Session Timeouts
+
+- Sessions on unregistered devices expire after 30 minutes of inactivity
+- Users on registered devices enjoy extended sessions with automatic refreshing
+- Clear timeout notifications inform users when sessions expire
+
+### Social Login Integration
+
+- Seamless authentication with Google, Facebook, and Apple
+- Consistent session management across all authentication methods
+- Device preferences respected regardless of login method
 
 ## Deployment
 

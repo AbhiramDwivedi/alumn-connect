@@ -10,6 +10,7 @@ async function setupDatabase() {
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
         email VARCHAR(255) UNIQUE NOT NULL,
         name VARCHAR(255) NOT NULL,
+        password VARCHAR(255) NOT NULL,
         phone VARCHAR(50),
         location VARCHAR(255),
         linkedin_url VARCHAR(255),
@@ -22,6 +23,7 @@ async function setupDatabase() {
         subscribe_to_notifications BOOLEAN DEFAULT false,
         status VARCHAR(50) DEFAULT 'pending',
         is_admin BOOLEAN DEFAULT false,
+        role VARCHAR(50) DEFAULT 'user',
         created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
       )
@@ -73,6 +75,22 @@ async function setupDatabase() {
       )
     `
     console.log("Feed table created")
+
+    // Create user devices table for device registration and session management
+    await sql`
+      CREATE TABLE IF NOT EXISTS user_devices (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        device_id VARCHAR(255) NOT NULL,
+        device_name VARCHAR(255),
+        user_agent TEXT,
+        last_used TIMESTAMP WITH TIME ZONE NOT NULL,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE(user_id, device_id)
+      )
+    `
+    console.log("User devices table created")
 
     console.log("All tables created successfully")
   } catch (err) {
