@@ -9,9 +9,15 @@ import { createLogger } from "@/lib/logger"
 // Create a logger for the alumni API
 const apiLogger = createLogger('alumni-detail-api')
 
+type ContextParams = {
+  params: {
+    id: string;
+  };
+};
+
 export async function GET(
   request: NextRequest,
-  context: { params: { id: string } }
+  { params }: ContextParams
 ) {
   try {
     // Get user session to check if user is authenticated
@@ -20,10 +26,9 @@ export async function GET(
       apiLogger.warn("Unauthorized access attempt to alumni detail API")
       return NextResponse.json(
         { error: "You must be signed in to access this resource" },
-        { status: 401 }      )
-    }
+        { status: 401 }      )    }
 
-    const id = context.params.id
+    const id = params.id
     
     if (!id) {
       apiLogger.warn("Missing alumni ID in request");
