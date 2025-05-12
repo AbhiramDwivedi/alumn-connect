@@ -1,11 +1,23 @@
 import React from "react"
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
+import { Inter, Montserrat, Open_Sans } from "next/font/google"
 import "./globals.css"
 import { branding } from "@/lib/branding"
 import { Providers } from "@/components/providers"
 
-const inter = Inter({ subsets: ["latin"] })
+const inter = Inter({ subsets: ["latin"], display: "swap" })
+const montserrat = Montserrat({ 
+  subsets: ["latin"],
+  variable: "--font-montserrat",
+  display: "swap",
+  weight: ["400", "500", "600", "700"]
+})
+const openSans = Open_Sans({
+  subsets: ["latin"],
+  variable: "--font-open-sans",
+  display: "swap",
+  weight: ["400", "500", "600", "700"]
+})
 
 export const metadata: Metadata = {
   title: {
@@ -23,18 +35,9 @@ export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
-}>) {
-  return (
+}>) {  return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@400;500;600;700&display=swap"
-          rel="stylesheet"
-        />
-      </head>
-      <body className={inter.className}>
+      <body className={`${inter.className} ${montserrat.variable} ${openSans.variable}`}>
         <Providers>
           {children}
         </Providers>

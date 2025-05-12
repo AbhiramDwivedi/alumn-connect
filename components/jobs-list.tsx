@@ -25,9 +25,9 @@ export function JobsList() {
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState("")
   const { toast } = useToast()
-
   useEffect(() => {
     fetchJobs()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   async function fetchJobs() {

@@ -23,9 +23,9 @@ export function EventsList() {
   const [searchQuery, setSearchQuery] = useState("")
   const [locationFilter, setLocationFilter] = useState("")
   const { toast } = useToast()
-
   useEffect(() => {
     fetchEvents()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   async function fetchEvents() {

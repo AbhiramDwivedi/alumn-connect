@@ -182,19 +182,18 @@ export default function DiagnosePage() {
           <li>Check that approved users exist in the database</li>
         </ul>
       </div>
-      
-      <div className="mt-6">
+        <div className="mt-6">
         <h2 className="text-xl font-semibold mb-2">Actions</h2>
         <div className="flex space-x-4">
-          <a href="/dashboard/alumni" className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+          <Link href="/dashboard/alumni" className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
             Try Alumni Directory
-          </a>
-          <a href="/" className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">
+          </Link>
+          <Link href="/" className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">
             Return to Home
-          </a>
-          <a href="/api/auth/signout" className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
+          </Link>
+          <Link href="/api/auth/signout" className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
             Sign Out
-          </a>
+          </Link>
         </div>
       </div>
     </div>
