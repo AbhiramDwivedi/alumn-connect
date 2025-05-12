@@ -11,8 +11,7 @@ export const metadata: Metadata = {
 }
 
 export default function RegisterPage() {
-  return (
-    <div className="h-screen w-full flex flex-col items-center justify-center bg-mnit-light/5">
+  return (    <div className="min-h-screen w-full py-12 flex flex-col items-center justify-center bg-mnit-light/5">
       <Link
         href="/"
         className={cn(
@@ -21,8 +20,7 @@ export default function RegisterPage() {
         )}
       >
         ← Back to Home
-      </Link>
-      <div className="mx-auto flex w-full flex-col space-y-6 sm:w-[350px] md:w-[500px] px-4">
+      </Link>      <div className="mx-auto flex w-full flex-col space-y-6 sm:w-[600px] md:w-[700px] lg:w-[800px] max-w-4xl px-4">
         <div className="flex flex-col space-y-2 text-center items-center">
           <div className="h-16 w-16 rounded-full overflow-hidden border-2 border-mnit-primary">
             <img
@@ -38,7 +36,9 @@ export default function RegisterPage() {
             Enter your information to create an alumni account
           </p>
         </div>
-        <RegisterForm />
+        <div className="bg-white/95 rounded-lg shadow-lg p-6 border border-gray-100">
+          <RegisterForm />
+        </div>
         <p className="px-8 text-center text-sm text-muted-foreground">
           Already have an account?{" "}
           <Link

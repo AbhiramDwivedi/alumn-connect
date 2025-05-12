@@ -1,19 +1,36 @@
 import { sql } from "@vercel/postgres"
 import CryptoJS from 'crypto-js'
 import { QueryResult, QueryResultRow } from "@vercel/postgres"
+import { createLogger } from './logger'
+
+// Create a logger for database operations
+const dbLogger = createLogger('database')
 
 export async function query(text: string, params?: any[]) {
   const start = Date.now()
-  const res = await sql.query(text, params || [])
-  const duration = Date.now() - start
-  // Avoid logging sensitive data in production
-  const sanitizedText = text.replace(/\s+/g, ' ').trim()
-  console.log("Executed query", { 
-    text: sanitizedText.substring(0, 50) + (sanitizedText.length > 50 ? '...' : ''), 
-    duration, 
-    rows: res.rowCount 
-  })
-  return res
+  try {
+    const res = await sql.query(text, params || [])
+    const duration = Date.now() - start
+    // Avoid logging sensitive data in production
+    const sanitizedText = text.replace(/\s+/g, ' ').trim()
+    dbLogger.debug("Executed query", { 
+      text: sanitizedText.substring(0, 50) + (sanitizedText.length > 50 ? '...' : ''), 
+      duration, 
+      rows: res.rowCount 
+    })
+    return res
+  } catch (error) {
+    const duration = Date.now() - start
+    const sanitizedText = text.replace(/\s+/g, ' ').trim()
+    dbLogger.error("Query error", {
+      text: sanitizedText.substring(0, 50) + (sanitizedText.length > 50 ? '...' : ''),
+      duration,
+      error: error instanceof Error ? error.message : String(error),
+      params: params ? JSON.stringify(params).substring(0, 100) : 'none',
+      stack: error instanceof Error ? error.stack : undefined
+    })
+    throw error
+  }
 }
 
 export async function getUser(id: string) {
@@ -26,10 +43,10 @@ export async function getUserByEmail(email: string) {
   return result.rows[0]
 }
 
-export async function createUser(userData: any) {
-  // Input validation and sanitization
+export async function createUser(userData: any) {  // Input validation and sanitization
   const {
     name,
+    preferred_name,
     email,
     password,
     phone,
@@ -91,12 +108,11 @@ export async function createUser(userData: any) {
   if (instagram_url && !urlRegex.test(instagram_url)) {
     throw new Error("Invalid Instagram URL format")
   }
-
   const result = await sql`
     INSERT INTO users 
-    (name, email, password, phone, location, linkedin_url, graduation_year, degree, major, twitter_url, facebook_url, instagram_url, subscribe_to_notifications, status) 
-    VALUES (${name}, ${email}, ${hashedPassword}, ${phone}, ${location}, ${linkedin_url}, ${graduation_year}, ${degree}, ${major}, ${twitter_url}, ${facebook_url}, ${instagram_url}, ${subscribe_to_notifications}, 'pending') 
-    RETURNING id, name, email, phone, location, linkedin_url, graduation_year, degree, major, twitter_url, facebook_url, instagram_url, subscribe_to_notifications, status, created_at, updated_at
+    (name, preferred_name, email, password, phone, location, linkedin_url, graduation_year, degree, major, twitter_url, facebook_url, instagram_url, subscribe_to_notifications, status) 
+    VALUES (${name}, ${preferred_name}, ${email}, ${hashedPassword}, ${phone}, ${location}, ${linkedin_url}, ${graduation_year}, ${degree}, ${major}, ${twitter_url}, ${facebook_url}, ${instagram_url}, ${subscribe_to_notifications}, 'pending') 
+    RETURNING id, name, preferred_name, email, phone, location, linkedin_url, graduation_year, degree, major, twitter_url, facebook_url, instagram_url, subscribe_to_notifications, status, created_at, updated_at
   `
 
   return result.rows[0]
@@ -112,6 +128,8 @@ export async function updateUserStatus(id: string, status: string) {
 
   return result.rows[0]
 }
+
+export { updateUserProfile } from './db-profile-update'
 
 export async function getPendingUsers() {
   const result = await sql`
@@ -171,54 +189,160 @@ export async function createJobOpportunity(jobData: any) {
 }
 
 export async function searchAlumni(searchParams: any) {
-  const { query, graduationYear, degree, major, location } = searchParams
-
-  // Using parameterized queries with Vercel's sql template literals for safety
-  let conditions = []
-  
-  if (query) {
-    conditions.push(sql`(
-      name ILIKE ${`%${query}%`} OR
-      email ILIKE ${`%${query}%`} OR
-      location ILIKE ${`%${query}%`} OR
-      major ILIKE ${`%${query}%`}
-    )`)
-  }
-
-  if (graduationYear) {
-    conditions.push(sql`graduation_year = ${graduationYear}`)
-  }
-
-  if (degree) {
-    conditions.push(sql`degree = ${degree}`)
-  }
-
-  if (major) {
-    conditions.push(sql`major ILIKE ${`%${major}%`}`)
-  }
-
-  if (location) {
-    conditions.push(sql`location ILIKE ${`%${location}%`}`)
-  }
-  
-  // Base query - start with raw SQL
-  let query_text = "SELECT * FROM users WHERE status = 'approved'";
-  let params: any[] = [];
-  
-  // Build up the complete query
-  if (conditions.length > 0) {
-    // Convert the query into a prepared statement with parameters
-    // This is a simplified approach - in a real app, you'd need more robust SQL building
-    const result = await sql.query(
-      `${query_text} AND ${conditions.map(() => '(?)').join(' AND ')} ORDER BY name ASC`,
-      conditions
-    );
+  const { 
+    query, 
+    graduationYear, 
+    degree, 
+    major, 
+    location, 
+    limit = 50, 
+    offset = 0, 
+    sortBy = 'name', 
+    sortDirection = 'asc' 
+  } = searchParams;
+  try {
+    let queryText = `
+      SELECT 
+        id, name, preferred_name, email, phone, location, 
+        linkedin_url, twitter_url, facebook_url, instagram_url,
+        graduation_year, degree, major, status, created_at
+      FROM users 
+      WHERE status = 'approved'
+    `;
     
+    const queryParams: any[] = [];
+    const conditions: string[] = [];
+      if (query) {
+      queryParams.push(`%${query}%`);
+      conditions.push(`(
+        name ILIKE $${queryParams.length} OR 
+        email ILIKE $${queryParams.length} OR 
+        location ILIKE $${queryParams.length} OR 
+        major ILIKE $${queryParams.length}
+      )`);
+    }
+    
+    if (graduationYear) {
+      queryParams.push(graduationYear);
+      conditions.push(`graduation_year = $${queryParams.length}`);
+    }
+    
+    if (degree) {
+      queryParams.push(degree);
+      conditions.push(`degree = $${queryParams.length}`);
+    }
+    
+    if (major) {
+      queryParams.push(`%${major}%`);
+      conditions.push(`major ILIKE $${queryParams.length}`);
+    }
+    
+    if (location) {
+      queryParams.push(`%${location}%`);
+      conditions.push(`location ILIKE $${queryParams.length}`);
+    }
+    
+    if (conditions.length > 0) {
+      queryText += ` AND ${conditions.join(" AND ")}`;
+    }
+      // Add sorting
+    const validSortColumns = ['name', 'graduation_year', 'location'];
+    const sortColumn = validSortColumns.includes(sortBy) ? sortBy : 'name';
+    const direction = sortDirection.toUpperCase() === 'DESC' ? 'DESC' : 'ASC';
+    
+    queryText += ` ORDER BY ${sortColumn} ${direction}`;
+    
+    // Handle nulls in sort order - put nulls last
+    if (sortColumn !== 'name') {
+      queryText += ` NULLS LAST`;
+    }
+    
+    // Add secondary sort by name for consistent results
+    if (sortColumn !== 'name') {
+      queryText += `, name ASC`;
+    }    queryText += ` LIMIT $${queryParams.length + 1} OFFSET $${queryParams.length + 2}`;
+    queryParams.push(limit, offset);
+    
+    // Use the sql object directly instead of query function
+    const result = await sql.query(queryText, queryParams);
+    dbLogger.info(`Found ${result.rows.length} alumni matching criteria`);
     return result.rows;
-  } else {
-    // Simple query without conditions
-    const result = await sql.query(`${query_text} ORDER BY name ASC`);
-    return result.rows;
+  } catch (error) {
+    dbLogger.error("Error searching alumni:", {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined
+    });
+    throw error;
+  }
+}
+
+export async function getAlumniCount(searchParams: any = {}) {
+  const { query, graduationYear, degree, major, location } = searchParams;
+  try {
+    let queryText = `SELECT COUNT(*) FROM users WHERE status = 'approved'`;
+    
+    const queryParams: any[] = [];
+    const conditions: string[] = [];
+      if (query) {
+      queryParams.push(`%${query}%`);
+      conditions.push(`(
+        name ILIKE $${queryParams.length} OR 
+        email ILIKE $${queryParams.length} OR 
+        location ILIKE $${queryParams.length} OR 
+        major ILIKE $${queryParams.length}
+      )`);
+    }
+    
+    if (graduationYear) {
+      queryParams.push(graduationYear);
+      conditions.push(`graduation_year = $${queryParams.length}`);
+    }
+    
+    if (degree) {
+      queryParams.push(degree);
+      conditions.push(`degree = $${queryParams.length}`);
+    }
+    
+    if (major) {
+      queryParams.push(`%${major}%`);
+      conditions.push(`major ILIKE $${queryParams.length}`);
+    }
+    
+    if (location) {
+      queryParams.push(`%${location}%`);
+      conditions.push(`location ILIKE $${queryParams.length}`);
+    }
+      if (conditions.length > 0) {
+      queryText += ` AND ${conditions.join(" AND ")}`;
+    }
+    
+    // Use sql directly instead of query function
+    const result = await sql.query(queryText, queryParams);
+    return parseInt(result.rows[0].count);
+  } catch (error) {
+    dbLogger.error("Error getting alumni count:", {
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined
+    });
+    throw error;
+  }
+}
+
+export async function getAlumniById(id: string) {
+  try {
+    const result = await sql`
+      SELECT 
+        id, name, preferred_name, email, phone, location, 
+        linkedin_url, twitter_url, facebook_url, instagram_url,
+        graduation_year, degree, major, company, position, status, created_at
+      FROM users 
+      WHERE id = ${id} AND status = 'approved'
+    `;
+    
+    return result.rows[0] || null;
+  } catch (error) {
+    console.error("Error getting alumni by id:", error);
+    throw error;
   }
 }
 

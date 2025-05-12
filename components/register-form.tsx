@@ -109,236 +109,261 @@ export function RegisterForm() {
       setIsLoading(false);
     }
   }
-
   return (
     <div className="grid gap-6">
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="name">Full Name <span className="text-red-500">*</span></Label>
-            <Input
-              id="name"
-              {...register("name")}
-              placeholder="John Doe"
-              disabled={isLoading}
-            />
-            {errors.name && (
-              <p className="text-sm text-red-500">{errors.name.message}</p>
-            )}
-          </div>
-          
-          <div className="space-y-2">
-            <Label htmlFor="preferred_name">Preferred Name</Label>
-            <Input
-              id="preferred_name"
-              {...register("preferred_name")}
-              placeholder="Johnny"
-              disabled={isLoading}
-            />
-            {errors.preferred_name && (
-              <p className="text-sm text-red-500">{errors.preferred_name.message}</p>
-            )}
-          </div>
-          
-          <div className="space-y-2">
-            <Label htmlFor="email">Email <span className="text-red-500">*</span></Label>
-            <Input
-              id="email"
-              type="email"
-              {...register("email")}
-              placeholder="john.doe@example.com"
-              disabled={isLoading}
-            />
-            {errors.email && (
-              <p className="text-sm text-red-500">{errors.email.message}</p>
-            )}
-          </div>
-          
-          <div className="space-y-2">
-            <Label htmlFor="password">Password <span className="text-red-500">*</span></Label>
-            <Input
-              id="password"
-              type="password"
-              {...register("password")}
-              placeholder="••••••••"
-              disabled={isLoading}
-            />
-            {errors.password && (
-              <p className="text-sm text-red-500">{errors.password.message}</p>
-            )}
-          </div>
-          
-          <div className="space-y-2">
-            <Label htmlFor="confirmPassword">Confirm Password <span className="text-red-500">*</span></Label>
-            <Input
-              id="confirmPassword"
-              type="password"
-              {...register("confirmPassword")}
-              placeholder="••••••••"
-              disabled={isLoading}
-            />
-            {errors.confirmPassword && (
-              <p className="text-sm text-red-500">{errors.confirmPassword.message}</p>
-            )}
-          </div>
-          
-          <div className="space-y-2">
-            <Label htmlFor="phone">Phone Number</Label>
-            <Input
-              id="phone"
-              {...register("phone")}
-              placeholder="+1 (555) 123-4567"
-              disabled={isLoading}
-            />
-            {errors.phone && (
-              <p className="text-sm text-red-500">{errors.phone.message}</p>
-            )}
-          </div>
-          
-          <div className="space-y-2">
-            <Label htmlFor="location">Current Location</Label>
-            <Input
-              id="location"
-              {...register("location")}
-              placeholder="City, Country"
-              disabled={isLoading}
-            />
-            {errors.location && (
-              <p className="text-sm text-red-500">{errors.location.message}</p>
-            )}
-          </div>
-          
-          <div className="space-y-2">
-            <Label htmlFor="graduation_year">Graduation Year <span className="text-red-500">*</span></Label>
-            <Select 
-              onValueChange={(value) => setValue("graduation_year", value)}
-              disabled={isLoading}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select Year" />
-              </SelectTrigger>
-              <SelectContent>
-                {graduationYearOptions.map((year) => (
-                  <SelectItem key={year} value={year.toString()}>
-                    {year}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Input 
-              type="hidden"
-              {...register("graduation_year")}
-            />
-            {errors.graduation_year && (
-              <p className="text-sm text-red-500">{errors.graduation_year.message}</p>
-            )}
-          </div>
-          
-          <div className="space-y-2">
-            <Label htmlFor="degree">Degree <span className="text-red-500">*</span></Label>
-            <Select 
-              onValueChange={(value) => setValue("degree", value)}
-              disabled={isLoading}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select Degree" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="B.Tech">B.Tech</SelectItem>
-                <SelectItem value="M.Tech">M.Tech</SelectItem>
-                <SelectItem value="PhD">PhD</SelectItem>
-                <SelectItem value="MBA">MBA</SelectItem>
-                <SelectItem value="MSc">MSc</SelectItem>
-                <SelectItem value="BSc">BSc</SelectItem>
-              </SelectContent>
-            </Select>
-            <Input 
-              type="hidden"
-              {...register("degree")}
-            />
-            {errors.degree && (
-              <p className="text-sm text-red-500">{errors.degree.message}</p>
-            )}
-          </div>
-          
-          <div className="space-y-2">
-            <Label htmlFor="major">Major/Department <span className="text-red-500">*</span></Label>
-            <Input
-              id="major"
-              {...register("major")}
-              placeholder="Computer Science"
-              disabled={isLoading}
-            />
-            {errors.major && (
-              <p className="text-sm text-red-500">{errors.major.message}</p>
-            )}
-          </div>
-          
-          <div className="space-y-2">
-            <Label htmlFor="linkedin_url">LinkedIn Profile URL</Label>
-            <Input
-              id="linkedin_url"
-              {...register("linkedin_url")}
-              placeholder="https://linkedin.com/in/username"
-              disabled={isLoading}
-            />
-            {errors.linkedin_url && (
-              <p className="text-sm text-red-500">{errors.linkedin_url.message}</p>
-            )}
-          </div>
-          
-          <div className="space-y-2">
-            <Label htmlFor="twitter_url">Twitter Profile URL</Label>
-            <Input
-              id="twitter_url"
-              {...register("twitter_url")}
-              placeholder="https://twitter.com/username"
-              disabled={isLoading}
-            />
-            {errors.twitter_url && (
-              <p className="text-sm text-red-500">{errors.twitter_url.message}</p>
-            )}
-          </div>
-          
-          <div className="space-y-2">
-            <Label htmlFor="facebook_url">Facebook Profile URL</Label>
-            <Input
-              id="facebook_url"
-              {...register("facebook_url")}
-              placeholder="https://facebook.com/username"
-              disabled={isLoading}
-            />
-            {errors.facebook_url && (
-              <p className="text-sm text-red-500">{errors.facebook_url.message}</p>
-            )}
-          </div>
-          
-          <div className="space-y-2">
-            <Label htmlFor="instagram_url">Instagram Profile URL</Label>
-            <Input
-              id="instagram_url"
-              {...register("instagram_url")}
-              placeholder="https://instagram.com/username"
-              disabled={isLoading}
-            />
-            {errors.instagram_url && (
-              <p className="text-sm text-red-500">{errors.instagram_url.message}</p>
-            )}
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+        {/* Personal Information Section */}
+        <div className="space-y-4">
+          <h3 className="text-lg font-medium border-b pb-2">Personal Information</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="name">Full Name <span className="text-red-500">*</span></Label>
+              <Input
+                id="name"
+                {...register("name")}
+                placeholder="John Doe"
+                disabled={isLoading}
+              />
+              {errors.name && (
+                <p className="text-sm text-red-500">{errors.name.message}</p>
+              )}
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="preferred_name">Preferred Name</Label>
+              <Input
+                id="preferred_name"
+                {...register("preferred_name")}
+                placeholder="Johnny"
+                disabled={isLoading}
+              />
+              {errors.preferred_name && (
+                <p className="text-sm text-red-500">{errors.preferred_name.message}</p>
+              )}
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="email">Email <span className="text-red-500">*</span></Label>
+              <Input
+                id="email"
+                type="email"
+                {...register("email")}
+                placeholder="john.doe@example.com"
+                disabled={isLoading}
+              />
+              {errors.email && (
+                <p className="text-sm text-red-500">{errors.email.message}</p>
+              )}
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="phone">Phone Number</Label>
+              <Input
+                id="phone"
+                {...register("phone")}
+                placeholder="+1 (555) 123-4567"
+                disabled={isLoading}
+              />
+              {errors.phone && (
+                <p className="text-sm text-red-500">{errors.phone.message}</p>
+              )}
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="location">Current Location</Label>
+              <Input
+                id="location"
+                {...register("location")}
+                placeholder="City, Country"
+                disabled={isLoading}
+              />
+              {errors.location && (
+                <p className="text-sm text-red-500">{errors.location.message}</p>
+              )}
+            </div>
           </div>
         </div>
         
-        <div className="flex items-center space-x-2 py-2">
-          <Checkbox 
-            id="subscribe_to_notifications" 
-            checked={watch("subscribe_to_notifications")}
-            onCheckedChange={(checked) => setValue("subscribe_to_notifications", checked === true)}
-          />
-          <Label 
-            htmlFor="subscribe_to_notifications" 
-            className="text-sm font-medium leading-none cursor-pointer"
-          >
-            Subscribe to notifications about events and job opportunities
-          </Label>
+        {/* Account Security Section */}
+        <div className="space-y-4">
+          <h3 className="text-lg font-medium border-b pb-2">Account Security</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="password">Password <span className="text-red-500">*</span></Label>
+              <Input
+                id="password"
+                type="password"
+                {...register("password")}
+                placeholder="••••••••"
+                disabled={isLoading}
+              />
+              {errors.password && (
+                <p className="text-sm text-red-500">{errors.password.message}</p>
+              )}
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="confirmPassword">Confirm Password <span className="text-red-500">*</span></Label>
+              <Input
+                id="confirmPassword"
+                type="password"
+                {...register("confirmPassword")}
+                placeholder="••••••••"
+                disabled={isLoading}
+              />
+              {errors.confirmPassword && (
+                <p className="text-sm text-red-500">{errors.confirmPassword.message}</p>
+              )}
+            </div>
+          </div>
+        </div>
+        
+        {/* Education Information Section */}
+        <div className="space-y-4">
+          <h3 className="text-lg font-medium border-b pb-2">Education Information</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="graduation_year">Graduation Year <span className="text-red-500">*</span></Label>
+              <Select 
+                onValueChange={(value) => setValue("graduation_year", value)}
+                disabled={isLoading}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select Year" />
+                </SelectTrigger>
+                <SelectContent>
+                  {graduationYearOptions.map((year) => (
+                    <SelectItem key={year} value={year.toString()}>
+                      {year}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Input 
+                type="hidden"
+                {...register("graduation_year")}
+              />
+              {errors.graduation_year && (
+                <p className="text-sm text-red-500">{errors.graduation_year.message}</p>
+              )}
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="degree">Degree <span className="text-red-500">*</span></Label>
+              <Select 
+                onValueChange={(value) => setValue("degree", value)}
+                disabled={isLoading}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select Degree" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="B.Tech">B.Tech</SelectItem>
+                  <SelectItem value="M.Tech">M.Tech</SelectItem>
+                  <SelectItem value="PhD">PhD</SelectItem>
+                  <SelectItem value="MBA">MBA</SelectItem>
+                  <SelectItem value="MSc">MSc</SelectItem>
+                  <SelectItem value="BSc">BSc</SelectItem>
+                </SelectContent>
+              </Select>
+              <Input 
+                type="hidden"
+                {...register("degree")}
+              />
+              {errors.degree && (
+                <p className="text-sm text-red-500">{errors.degree.message}</p>
+              )}
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="major">Major/Department <span className="text-red-500">*</span></Label>
+              <Input
+                id="major"
+                {...register("major")}
+                placeholder="Computer Science"
+                disabled={isLoading}
+              />
+              {errors.major && (
+                <p className="text-sm text-red-500">{errors.major.message}</p>
+              )}
+            </div>
+          </div>
+        </div>
+        
+        {/* Social Media Profiles Section */}
+        <div className="space-y-4">
+          <h3 className="text-lg font-medium border-b pb-2">Social Media Profiles</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="linkedin_url">LinkedIn Profile URL</Label>
+              <Input
+                id="linkedin_url"
+                {...register("linkedin_url")}
+                placeholder="https://linkedin.com/in/username"
+                disabled={isLoading}
+              />
+              {errors.linkedin_url && (
+                <p className="text-sm text-red-500">{errors.linkedin_url.message}</p>
+              )}
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="twitter_url">Twitter Profile URL</Label>
+              <Input
+                id="twitter_url"
+                {...register("twitter_url")}
+                placeholder="https://twitter.com/username"
+                disabled={isLoading}
+              />
+              {errors.twitter_url && (
+                <p className="text-sm text-red-500">{errors.twitter_url.message}</p>
+              )}
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="facebook_url">Facebook Profile URL</Label>
+              <Input
+                id="facebook_url"
+                {...register("facebook_url")}
+                placeholder="https://facebook.com/username"
+                disabled={isLoading}
+              />
+              {errors.facebook_url && (
+                <p className="text-sm text-red-500">{errors.facebook_url.message}</p>
+              )}
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="instagram_url">Instagram Profile URL</Label>
+              <Input
+                id="instagram_url"
+                {...register("instagram_url")}
+                placeholder="https://instagram.com/username"
+                disabled={isLoading}
+              />
+              {errors.instagram_url && (
+                <p className="text-sm text-red-500">{errors.instagram_url.message}</p>
+              )}
+            </div>
+          </div>
+        </div>
+        
+        {/* Preferences Section */}
+        <div className="space-y-4">
+          <h3 className="text-lg font-medium border-b pb-2">Preferences</h3>
+          <div className="flex items-center space-x-2 py-2">
+            <Checkbox 
+              id="subscribe_to_notifications" 
+              checked={watch("subscribe_to_notifications")}
+              onCheckedChange={(checked) => setValue("subscribe_to_notifications", checked === true)}
+            />
+            <Label 
+              htmlFor="subscribe_to_notifications" 
+              className="text-sm font-medium leading-none cursor-pointer"
+            >
+              Subscribe to notifications about events and job opportunities
+            </Label>
+          </div>
         </div>
         
         {error && (

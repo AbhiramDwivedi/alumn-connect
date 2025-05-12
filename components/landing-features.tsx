@@ -1,6 +1,39 @@
+"use client"
+
+import { useState } from "react"
 import { Users, Calendar, Briefcase, Search, Globe, Bell } from "lucide-react"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { useSession } from "next-auth/react"
+import { useToast } from "@/components/ui/use-toast"
 
 export function LandingFeatures() {
+  const { data: session, status } = useSession()
+  const router = useRouter()
+  const { toast } = useToast()
+  const [isRedirecting, setIsRedirecting] = useState(false)
+
+  const handleFeatureClick = (e: React.MouseEvent<HTMLAnchorElement>, path: string) => {
+    // If user is not authenticated, prevent the default Link behavior
+    if (status !== "authenticated") {
+      e.preventDefault()
+      
+      // Show toast notification
+      toast({
+        title: "Authentication required",
+        description: "Please log in to access this feature",
+        variant: "default",
+      })
+      
+      // Set redirecting state to prevent multiple clicks
+      if (!isRedirecting) {
+        setIsRedirecting(true)
+        // Redirect to login page with callback
+        router.push(`/login?callbackUrl=${encodeURIComponent(path)}`)
+      }
+    }
+  }
+
   return (
     <section id="features" className="w-full py-12 md:py-24 lg:py-32 bg-white relative">
       {/* Decorative elements */}
@@ -23,45 +56,73 @@ export function LandingFeatures() {
             </p>
           </div>
         </div>
-
+        
         <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 py-8 md:grid-cols-2 lg:grid-cols-3">
-          <div className="flex flex-col items-center space-y-4 rounded-xl border p-6 shadow-sm card-hover bg-white">
-            <div className="rounded-full bg-mnit-light p-3">
-              <Users className="h-8 w-8 text-mnit-primary" />
+          <Link 
+            href="/dashboard/alumni" 
+            className="block w-full"
+            onClick={(e) => handleFeatureClick(e, "/dashboard/alumni")}
+          >
+            <div className="flex flex-col items-center space-y-4 rounded-xl border p-6 shadow-sm card-hover bg-white h-full hover:shadow-md transition-all duration-200">
+              <div className="rounded-full bg-mnit-light p-3">
+                <Users className="h-8 w-8 text-mnit-primary" />
+              </div>
+              <h3 className="text-xl font-bold">Alumni Directory</h3>
+              <p className="text-center text-muted-foreground">
+                Search and connect with alumni based on graduation year, location, or field of work.
+              </p>
             </div>
-            <h3 className="text-xl font-bold">Alumni Directory</h3>
-            <p className="text-center text-muted-foreground">
-              Search and connect with alumni based on graduation year, location, or field of work.
-            </p>
-          </div>
-          <div className="flex flex-col items-center space-y-4 rounded-xl border p-6 shadow-sm card-hover bg-white">
-            <div className="rounded-full bg-mnit-light p-3">
-              <Calendar className="h-8 w-8 text-mnit-primary" />
+          </Link>
+          
+          <Link 
+            href="/dashboard/events" 
+            className="block w-full"
+            onClick={(e) => handleFeatureClick(e, "/dashboard/events")}
+          >
+            <div className="flex flex-col items-center space-y-4 rounded-xl border p-6 shadow-sm card-hover bg-white h-full hover:shadow-md transition-all duration-200">
+              <div className="rounded-full bg-mnit-light p-3">
+                <Calendar className="h-8 w-8 text-mnit-primary" />
+              </div>
+              <h3 className="text-xl font-bold">Events</h3>
+              <p className="text-center text-muted-foreground">
+                Discover and organize alumni meetups, reunions, and networking events.
+              </p>
             </div>
-            <h3 className="text-xl font-bold">Events</h3>
-            <p className="text-center text-muted-foreground">
-              Discover and organize alumni meetups, reunions, and networking events.
-            </p>
-          </div>
-          <div className="flex flex-col items-center space-y-4 rounded-xl border p-6 shadow-sm card-hover bg-white">
-            <div className="rounded-full bg-mnit-light p-3">
-              <Briefcase className="h-8 w-8 text-mnit-primary" />
+          </Link>
+          
+          <Link 
+            href="/dashboard/jobs" 
+            className="block w-full"
+            onClick={(e) => handleFeatureClick(e, "/dashboard/jobs")}
+          >
+            <div className="flex flex-col items-center space-y-4 rounded-xl border p-6 shadow-sm card-hover bg-white h-full hover:shadow-md transition-all duration-200">
+              <div className="rounded-full bg-mnit-light p-3">
+                <Briefcase className="h-8 w-8 text-mnit-primary" />
+              </div>
+              <h3 className="text-xl font-bold">Job Board</h3>
+              <p className="text-center text-muted-foreground">
+                Post and find job opportunities within the alumni network.
+              </p>
             </div>
-            <h3 className="text-xl font-bold">Job Board</h3>
-            <p className="text-center text-muted-foreground">
-              Post and find job opportunities within the alumni network.
-            </p>
-          </div>
-          <div className="flex flex-col items-center space-y-4 rounded-xl border p-6 shadow-sm card-hover bg-white">
-            <div className="rounded-full bg-mnit-light p-3">
-              <Search className="h-8 w-8 text-mnit-primary" />
+          </Link>
+          
+          <Link 
+            href="/dashboard/search" 
+            className="block w-full"
+            onClick={(e) => handleFeatureClick(e, "/dashboard/search")}
+          >
+            <div className="flex flex-col items-center space-y-4 rounded-xl border p-6 shadow-sm card-hover bg-white h-full hover:shadow-md transition-all duration-200">
+              <div className="rounded-full bg-mnit-light p-3">
+                <Search className="h-8 w-8 text-mnit-primary" />
+              </div>
+              <h3 className="text-xl font-bold">Smart Search</h3>
+              <p className="text-center text-muted-foreground">
+                Find alumni and opportunities with our powerful search across all fields.
+              </p>
             </div>
-            <h3 className="text-xl font-bold">Smart Search</h3>
-            <p className="text-center text-muted-foreground">
-              Find alumni and opportunities with our powerful search across all fields.
-            </p>
-          </div>
-          <div className="flex flex-col items-center space-y-4 rounded-xl border p-6 shadow-sm card-hover bg-white">
+          </Link>
+          
+          <div className="flex flex-col items-center space-y-4 rounded-xl border p-6 shadow-sm card-hover bg-white h-full">
             <div className="rounded-full bg-mnit-light p-3">
               <Globe className="h-8 w-8 text-mnit-primary" />
             </div>
@@ -70,7 +131,8 @@ export function LandingFeatures() {
               Connect with alumni from around the world and expand your professional network.
             </p>
           </div>
-          <div className="flex flex-col items-center space-y-4 rounded-xl border p-6 shadow-sm card-hover bg-white">
+          
+          <div className="flex flex-col items-center space-y-4 rounded-xl border p-6 shadow-sm card-hover bg-white h-full">
             <div className="rounded-full bg-mnit-light p-3">
               <Bell className="h-8 w-8 text-mnit-primary" />
             </div>
@@ -78,8 +140,7 @@ export function LandingFeatures() {
             <p className="text-center text-muted-foreground">
               Stay updated with the latest events, job postings, and network activities.
             </p>
-          </div>
-        </div>
+          </div>        </div>
       </div>
     </section>
   )

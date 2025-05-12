@@ -6,7 +6,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "playwright test",
+    "test:registration": "playwright test tests/user-flow.spec.ts",
+    "test:api": "playwright test tests/api-endpoints.spec.ts",
+    "test:directory": "playwright test tests/alumni-directory.spec.ts",
+    "test:diagnostic": "playwright test tests/db-diagnostic.spec.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",

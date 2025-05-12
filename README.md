@@ -116,6 +116,35 @@ This project is designed to be deployed on Vercel:
 3. Configure the environment variables
 4. Deploy
 
+## Testing
+
+Comprehensive test coverage is provided with Playwright:
+
+1. **Automated Tests**: 
+   - User registration flow
+   - Login and authentication 
+   - Alumni directory functionality
+   - API endpoints
+
+2. **Test Suite**:
+   ```bash
+   # Run the interactive test script
+   node scripts/run-tests.js
+   
+   # Run all tests
+   npm test
+   
+   # Run specific test suite
+   npm run test:registration
+   ```
+
+3. **Manual Testing Support**:
+   - Script to approve all pending users
+   - Diagnostic page at `/diagnostic`
+   - API test endpoint at `/api/test-db`
+
+For detailed testing documentation, see [TESTING.md](TESTING.md).
+
 ## Contributing
 
 Contributions are welcome! To contribute:

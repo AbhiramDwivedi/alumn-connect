@@ -1,8 +1,13 @@
+"use client"
+
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Briefcase, Calendar, GraduationCap, Users } from "lucide-react"
+import { useSession } from "next-auth/react"
 
 export function LandingHero() {
+  const { data: session } = useSession()
+
   return (
     <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 overflow-hidden relative">
       {/* Background gradient */}

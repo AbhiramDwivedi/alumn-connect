@@ -16,6 +16,17 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
+# logs
+/logs
+*.log
+
+# backup files
+*.bak
+*-backup.*
+*-old.*
+*-new.*
+*-fixed.*
+
 # env files
 .env
 .env*.local
@@ -29,3 +40,14 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# IDE and editors
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db

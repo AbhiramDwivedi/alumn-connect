@@ -21,11 +21,11 @@ const navItems: NavItem[] = [
     title: "Dashboard",
     href: "/dashboard",
     icon: <Home className="mr-2 h-4 w-4" />,
-  },
-  {
+  },  {
     title: "Alumni Directory",
     href: "/dashboard/alumni",
     icon: <Users className="mr-2 h-4 w-4" />,
+    badge: "New",
   },
   {
     title: "Events",
@@ -42,6 +42,10 @@ const navItems: NavItem[] = [
     title: "Search",
     href: "/dashboard/search",
     icon: <Search className="mr-2 h-4 w-4" />,
+  },  {
+    title: "Profile",
+    href: "/dashboard/profile",
+    icon: <Users className="mr-2 h-4 w-4" />,
   },
   {
     title: "Settings",
