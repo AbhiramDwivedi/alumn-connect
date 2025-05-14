@@ -10,7 +10,9 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Separator } from "@/components/ui/separator"
-import { GraduationCap, MapPin, Mail, Phone, LinkedIn, Twitter, Facebook, Instagram, ArrowLeft, Download, Briefcase, Building, Edit } from "lucide-react"
+import { GraduationCap, MapPin, Mail, Phone, Twitter, Facebook, Instagram, ArrowLeft, Download, Briefcase, Building, Edit } from "lucide-react"
+// Import the LinkedIn icon separately to avoid barrel optimization issues
+import { Link as LinkedInIcon } from "lucide-react"
 import Link from "next/link"
 
 type Alumnus = {
@@ -252,10 +254,9 @@ END:VCARD`
                             <a 
                               href={alumnus.linkedin_url} 
                               target="_blank" 
-                              rel="noopener noreferrer"
-                              className="inline-flex items-center px-4 py-2 rounded-md bg-[#0077B5]/10 text-[#0077B5] hover:bg-[#0077B5]/20 transition-colors"
+                              rel="noopener noreferrer"                              className="inline-flex items-center px-4 py-2 rounded-md bg-[#0077B5]/10 text-[#0077B5] hover:bg-[#0077B5]/20 transition-colors"
                             >
-                              <LinkedIn className="mr-2 h-5 w-5" />
+                              <LinkedInIcon className="mr-2 h-5 w-5" />
                               LinkedIn
                             </a>
                           )}

@@ -1,5 +1,3 @@
-"use server"
-
 import { NextRequest, NextResponse } from "next/server"
 import { getAlumniById } from "@/lib/db"
 import { getServerSession } from "next-auth"
@@ -9,9 +7,10 @@ import { createLogger } from "@/lib/logger"
 // Create a logger for the alumni API
 const apiLogger = createLogger('alumni-detail-api')
 
+// Using the Next.js App Router format for dynamic route handlers
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   try {
     // Get user session to check if user is authenticated
@@ -20,9 +19,19 @@ export async function GET(
       apiLogger.warn("Unauthorized access attempt to alumni detail API")
       return NextResponse.json(
         { error: "You must be signed in to access this resource" },
-        { status: 401 }      )}
+        { status: 401 }      )
+    }
+    
+    // Verify user status
+    if (session.user.status !== 'approved') {
+      apiLogger.warn(`User ${session.user.email} with status ${session.user.status} attempted to access alumni detail API`);
+      return NextResponse.json(
+        { error: "Your account must be approved to access this resource" },
+        { status: 403 }
+      )
+    }
 
-    const id = params.id
+    const id = context.params.id
     
     if (!id) {
       apiLogger.warn("Missing alumni ID in request");
@@ -30,7 +39,9 @@ export async function GET(
         { error: "Alumni ID is required" },
         { status: 400 }
       )
-    }    // Get alumni by ID
+    }
+    
+    // Get alumni by ID
     const alumnus = await getAlumniById(id)
     
     if (!alumnus) {
