@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Users, Calendar, Briefcase, Search, Globe, Bell } from "lucide-react"
+import { Users, Calendar, Briefcase } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useSession } from "next-auth/react"
@@ -97,50 +97,14 @@ export function LandingFeatures() {
           >
             <div className="flex flex-col items-center space-y-4 rounded-xl border p-6 shadow-sm card-hover bg-white h-full hover:shadow-md transition-all duration-200">
               <div className="rounded-full bg-mnit-light p-3">
-                <Briefcase className="h-8 w-8 text-mnit-primary" />
-              </div>
+                <Briefcase className="h-8 w-8 text-mnit-primary" />              </div>
               <h3 className="text-xl font-bold">Job Board</h3>
               <p className="text-center text-muted-foreground">
                 Post and find job opportunities within the alumni network.
               </p>
             </div>
           </Link>
-          
-          <Link 
-            href="/dashboard/search" 
-            className="block w-full"
-            onClick={(e) => handleFeatureClick(e, "/dashboard/search")}
-          >
-            <div className="flex flex-col items-center space-y-4 rounded-xl border p-6 shadow-sm card-hover bg-white h-full hover:shadow-md transition-all duration-200">
-              <div className="rounded-full bg-mnit-light p-3">
-                <Search className="h-8 w-8 text-mnit-primary" />
-              </div>
-              <h3 className="text-xl font-bold">Smart Search</h3>
-              <p className="text-center text-muted-foreground">
-                Find alumni and opportunities with our powerful search across all fields.
-              </p>
-            </div>
-          </Link>
-          
-          <div className="flex flex-col items-center space-y-4 rounded-xl border p-6 shadow-sm card-hover bg-white h-full">
-            <div className="rounded-full bg-mnit-light p-3">
-              <Globe className="h-8 w-8 text-mnit-primary" />
-            </div>
-            <h3 className="text-xl font-bold">Global Network</h3>
-            <p className="text-center text-muted-foreground">
-              Connect with alumni from around the world and expand your professional network.
-            </p>
-          </div>
-          
-          <div className="flex flex-col items-center space-y-4 rounded-xl border p-6 shadow-sm card-hover bg-white h-full">
-            <div className="rounded-full bg-mnit-light p-3">
-              <Bell className="h-8 w-8 text-mnit-primary" />
-            </div>
-            <h3 className="text-xl font-bold">Notifications</h3>
-            <p className="text-center text-muted-foreground">
-              Stay updated with the latest events, job postings, and network activities.
-            </p>
-          </div>        </div>
+        </div>
       </div>
     </section>
   )
