@@ -46,17 +46,26 @@ export function LandingNavbar() {
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-2">
           <Logo href="/" size="md" variant="default" />
-        </div>
-        <nav className="hidden md:flex items-center gap-8">
+        </div>        <nav className="hidden md:flex items-center gap-8">
           <Link
-            href="/#features"
+            href="/dashboard"
             className="text-sm font-medium transition-colors hover:text-mnit-primary relative group"
           >
-            Features
+            Dashboard
             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-mnit-primary transition-all group-hover:w-full"></span>
           </Link>
-          <Link href="/#about" className="text-sm font-medium transition-colors hover:text-mnit-primary relative group">
-            About
+          <Link
+            href="/dashboard/alumni"
+            className="text-sm font-medium transition-colors hover:text-mnit-primary relative group"
+          >
+            Directory
+            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-mnit-primary transition-all group-hover:w-full"></span>
+          </Link>
+          <Link
+            href="/dashboard/events"
+            className="text-sm font-medium transition-colors hover:text-mnit-primary relative group"
+          >
+            Events
             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-mnit-primary transition-all group-hover:w-full"></span>
           </Link>
         </nav>
